@@ -17,3 +17,38 @@ spec:
           image: metersystem-api:latest
           imagePullPolicy: Never
 
+
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: RabbitMq__Host
+              value: rabbitmq
+            - name: RabbitMq__Port
+              value: "5672"
+            - name: RabbitMq__User
+              value: guest
+            - name: RabbitMq__Password
+              value: guest
+            - name: RabbitMq__QueueName
+              value: readings
+
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: metersystem-api
+
+spec:
+  selector:
+    app: metersystem-api
+
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+  type: ClusterIP
