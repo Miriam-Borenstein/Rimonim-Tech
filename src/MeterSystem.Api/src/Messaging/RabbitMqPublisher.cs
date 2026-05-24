@@ -1,9 +1,10 @@
 using System.Text;
 using System.Text.Json;
+using MeterSystem.Shared.src.Messaging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace MeterSystem.Shared.src.Messaging.RabbitMq;
+namespace MeterSystem.Api.src.Messaging;
 
 public class RabbitMqPublisher : IMessagePublisher, IDisposable
 {

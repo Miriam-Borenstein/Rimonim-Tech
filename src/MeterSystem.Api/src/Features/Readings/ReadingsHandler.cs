@@ -1,5 +1,5 @@
 using MeterSystem.Api.src.DTOs;
-using MeterSystem.Shared.src.Messaging;
+using MeterSystem.Api.src.Messaging;
 
 namespace MeterSystem.Api.src.Features.Readings;
 

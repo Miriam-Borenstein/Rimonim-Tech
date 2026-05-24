@@ -1,4 +1,4 @@
-namespace MeterSystem.Shared.src.Messaging;
+namespace MeterSystem.Api.src.Messaging;
 
 public interface IMessagePublisher
 {

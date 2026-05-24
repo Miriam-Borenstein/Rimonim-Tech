@@ -1,7 +1,6 @@
 using Carter;
 using MeterSystem.Api.src.Features.Readings;
-using MeterSystem.Shared.src.Messaging;
-using MeterSystem.Shared.src.Messaging.RabbitMq;
+using MeterSystem.Api.src.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +9,7 @@ builder.Services.AddCarter();
 
 builder.Services.AddScoped<ReadingsHandler>();
 
-builder.Services.Configure<RabbitMqOptions>(
-    builder.Configuration.GetSection("RabbitMq"));
-
-builder.Services.AddSingleton<IMessagePublisher, RabbitMqPublisher>();
+builder.Services.AddRabbitMqPublisher(builder.Configuration);
 
 
 

@@ -1,4 +1,4 @@
-namespace MeterSystem.Shared.src.Messaging.RabbitMq;
+namespace MeterSystem.Shared.src.Messaging;
 
 public class RabbitMqOptions
 {

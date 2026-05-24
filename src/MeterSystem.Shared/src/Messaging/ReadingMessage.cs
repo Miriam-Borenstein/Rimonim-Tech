@@ -1,6 +1,4 @@
-
-
-namespace MeterSystem.Shared.src.Messaging.RabbitMq;
+namespace MeterSystem.Shared.src.Messaging;
 
 public record ReadingItem(DateTime Timestamp, double Value);
 
