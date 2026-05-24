@@ -14,8 +14,4 @@
       <ProjectReference Include="..\MeterSystem.Shared\MeterSystem.Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="src\Messaging\" />
-    </ItemGroup>
-
 </Project>
