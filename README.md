@@ -5,6 +5,7 @@ A distributed meter readings processing system built with ASP.NET Core, RabbitMQ
 The system accepts batches of meter readings through an HTTP API, processes them asynchronously using RabbitMQ, and stores them in PostgreSQL while ensuring idempotent inserts.
 
 ## Features
+
 Accept batch readings per meter
 Asynchronous processing using RabbitMQ
 Background worker for queue consumption
@@ -14,6 +15,7 @@ Kubernetes deployment using Minikube
 Separation between API, Worker, Messaging, and Shared contracts
 
 ## Processing Flow
+
 1. Client sends readings to the API
 2. API validates the request
 3. Readings are published to RabbitMQ
@@ -23,15 +25,18 @@ Separation between API, Worker, Messaging, and Shared contracts
 7. Duplicate readings are ignored using database constraints
 
 ## API Endpoint
+
 #### Submit Meter Readings
 POST /readings
 
 Request Example: 
 {
   "meter_number": 12345,
-  "readings": {
+  "readings":
+  {
     "2026-03-18T10:15:00Z": 1234.56,
-    "2026-03-18T10:00:00Z": 1234.51}
+    "2026-03-18T10:00:00Z": 1234.51
+  }
 }
 
 ## Design Highlights
@@ -50,25 +55,14 @@ kubectl
 .NET 8 SDK
 
 
-#### Steps
+### Run Locally (Minikube)
+
+Run the following command to deploy the entire system:
 
 minikube start
 
-kubectl apply -f queue/deploy.yaml
+chmod +x deploy.sh
+./deploy.sh
 
-kubectl apply -f database/deploy.yaml
 
-kubectl exec -i postgres-65c498f85d-m7p4x -- psql -U postgres -d meters < database/schema.sql
-
-docker build -t metersystem-api -f src/MeterSystem.Api/Dockerfile .
-
-minikube image load metersystem-api:latest
-
-kubectl apply -f src/MeterSystem.Api/deploy.yaml
-
-docker build -t metersystem-worker -f src/MeterSystem.Worker/Dockerfile .
-
-minikube image load metersystem-worker:latest 
-
-kubectl apply -f src/MeterSystem.Worker/deploy.yaml
-
+kubectl port-forward svc/metersystem-api 5000:80
