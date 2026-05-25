@@ -17,7 +17,7 @@ public class ReadingHandler
     }
     public async Task Handle(ReadingMessage msg)
     {
-        _logger.LogInformation("Message received from queue");
+        _logger.LogInformation("Message received from queue - meter number : {meter_number}", msg.MeterNumber);
 
         var meterId = await _meterRepo.GetOrCreateMeterAsync(msg.MeterNumber);
 
@@ -25,7 +25,7 @@ public class ReadingHandler
         {
             await _readingRepo.InsertReadingAsync(meterId, reading);
         }
-        _logger.LogInformation("Saving to DB");
+        _logger.LogInformation("Saving to DB - meterId : {meterId}", meterId);
     }
 
 }
