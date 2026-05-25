@@ -1,7 +1,6 @@
 
 using Dapper;
 using MeterSystem.Worker.src.Infrastructure.Data;
-using Npgsql;
 
 namespace MeterSystem.Worker.src.Infrastructure.Repositories;
 

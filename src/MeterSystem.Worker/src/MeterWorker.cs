@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 namespace MeterSystem.Worker.src;
 
 public class MeterWorker : BackgroundService
@@ -12,9 +9,11 @@ public class MeterWorker : BackgroundService
         _consumer = consumer;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        _consumer.Start();
-        return Task.CompletedTask;
+        await _consumer.Start(cancellationToken);
+
+        await Task.Delay(Timeout.Infinite, cancellationToken);
+
     }
 }

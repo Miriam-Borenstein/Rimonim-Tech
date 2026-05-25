@@ -1,20 +1,16 @@
-using System.Text;
-using System.Text.Json;
-using MeterSystem.Shared.src.Messaging;
-using Microsoft.Extensions.Options;
-using RabbitMQ.Client;
-
 namespace MeterSystem.Api.src.Messaging;
 
 public class RabbitMqPublisher : IMessagePublisher, IDisposable
 {
     private readonly RabbitMqOptions _options;
+    private readonly ILogger<RabbitMqPublisher> _logger;
     private readonly IConnection _connection;
     private readonly IModel _channel;
 
-    public RabbitMqPublisher(IOptions<RabbitMqOptions> options)
+    public RabbitMqPublisher(IOptions<RabbitMqOptions> options,ILogger<RabbitMqPublisher> logger)
     {
         _options = options.Value;
+        _logger = logger;
 
         var factory = new ConnectionFactory
         {
@@ -23,9 +19,19 @@ public class RabbitMqPublisher : IMessagePublisher, IDisposable
             UserName = _options.User,
             Password = _options.Password
         };
+        try
+        {
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+        }
+        catch(Exception ex) {
+            _logger.LogError(ex.Message, "Failed to connect to RabbitMQ");
+            throw;
+        }
 
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+
+
+        _logger.LogInformation("Channel created successfully");
 
         _channel.QueueDeclare(
             queue: _options.QueueName,
@@ -45,6 +51,8 @@ public class RabbitMqPublisher : IMessagePublisher, IDisposable
             routingKey: _options.QueueName,
             basicProperties: null,
             body: body);
+
+        _logger.LogInformation("Message published: {Message}", json);
 
         return Task.CompletedTask;
     }

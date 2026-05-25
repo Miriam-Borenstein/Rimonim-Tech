@@ -5,7 +5,7 @@ using MeterSystem.Worker.src.Infrastructure.Data;
 
 namespace MeterSystem.Worker.src.Infrastructure.Repositories;
 
-internal class ReadingRepository : IReadingRepository
+public class ReadingRepository : IReadingRepository
 {
     private readonly DbConnectionFactory _db;
 

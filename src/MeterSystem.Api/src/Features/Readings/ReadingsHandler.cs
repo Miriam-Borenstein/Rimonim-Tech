@@ -1,7 +1,3 @@
-using MeterSystem.Api.src.DTOs;
-using MeterSystem.Api.src.Messaging;
-using MeterSystem.Shared.src.Messaging;
-
 namespace MeterSystem.Api.src.Features.Readings;
 
 public class ReadingsHandler
@@ -16,7 +12,7 @@ public class ReadingsHandler
         _logger = logger;
     }
 
-    internal async Task Handle(ReadingRequest request) {
+    public async Task Handle(ReadingRequest request) {
 
         _logger.LogInformation("Received POST request");
         var message = new ReadingMessage(

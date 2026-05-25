@@ -1,7 +1,5 @@
-using MeterSystem.Shared.src.Messaging;
 using MeterSystem.Worker.src.Infrastructure.Data;
 using MeterSystem.Worker.src.Infrastructure.Repositories;
-using MeterSystem.Worker.src.Messaging;
 
 var builder = Host.CreateApplicationBuilder(args);
 

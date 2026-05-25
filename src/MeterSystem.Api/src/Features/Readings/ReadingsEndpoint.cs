@@ -1,24 +1,20 @@
-using Carter;
-using MeterSystem.Api.src.DTOs;
+namespace MeterSystem.Api.src.Features.Readings;
 
-namespace MeterSystem.Api.src.Features.Readings
+public class ReadingsEndPoint : ICarterModule
 {
-    public class ReadingsEndPoint : ICarterModule
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        public void AddRoutes(IEndpointRouteBuilder app)
+        app.MapPost("/readings", async (ReadingRequest request, ReadingsHandler handler) =>
         {
-            app.MapPost("/readings", async (ReadingRequest request, ReadingsHandler handler) =>
-            {
-                if (request.meter_number <= 0)
-                    return Results.BadRequest();
+            if (request.meter_number <= 0)
+                return Results.BadRequest();
 
-                if (request.Readings == null)
-                    return Results.BadRequest();
+            if (request.Readings == null)
+                return Results.BadRequest();
 
-                await handler.Handle(request);
+            await handler.Handle(request);
 
-                return Results.Accepted();
-            });
-        }
+            return Results.Accepted();
+        });
     }
 }

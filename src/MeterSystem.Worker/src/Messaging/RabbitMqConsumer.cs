@@ -8,12 +8,13 @@ public class RabbitMqConsumer
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private readonly ReadingHandler _handler;
+    private readonly ILogger<RabbitMqConsumer> _logger;
 
-
-    public RabbitMqConsumer(IOptions<RabbitMqOptions> options , ReadingHandler handler)
+    public RabbitMqConsumer(IOptions<RabbitMqOptions> options , ReadingHandler handler, ILogger<RabbitMqConsumer> logger)
     {
         _options = options.Value;
         _handler = handler;
+        _logger = logger;
 
         var factory = new ConnectionFactory
         {
@@ -34,7 +35,7 @@ public class RabbitMqConsumer
             arguments: null);
     }
 
-    public async Task Start()
+    public async Task Start(CancellationToken cancellationToken)
     {
         var consumer = new EventingBasicConsumer(_channel);
 
@@ -42,6 +43,12 @@ public class RabbitMqConsumer
         {
             await OnMessageReceived(s, ea);
         };
+
+        cancellationToken.Register(() =>
+        {
+            _channel.Close();
+            _connection.Close();
+        });
 
         _channel.BasicConsume(_options.QueueName, autoAck: false, consumer);
     }
@@ -60,7 +67,7 @@ public class RabbitMqConsumer
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            _logger.LogError(ex.Message);
             _channel.BasicNack(ea.DeliveryTag, false, true);
         }
 
